@@ -29,12 +29,17 @@ def evaluate(mnist):
                 if ckpt and ckpt.model_checkpoint_path:
                     saver.restore(sess, ckpt.model_checkpoint_path)
                     global_step = ckpt.model_checkpoint_path.split("/")[-1].split("-")[-1]
-                    x_reshaped = np.reshape(mnist.validation.images, [-1, 
+                    x_reshaped_v = np.reshape(mnist.validation.images, [-1, 
                                                 mnist_inference.IMAGE_SIZE,
                                                 mnist_inference.IMAGE_SIZE, 
                                                 mnist_inference.IMAGE_CHANNELS])
-                    validation_acc = sess.run(accuracy, feed_dict={x: x_reshaped, y_: mnist.validation.labels})
-                    print("After %s steps, the accuracy on validation set is %g." % (global_step, validation_acc))
+                    x_reshaped_t = np.reshape(mnist.test.images, [-1, 
+                                                mnist_inference.IMAGE_SIZE,
+                                                mnist_inference.IMAGE_SIZE, 
+                                                mnist_inference.IMAGE_CHANNELS])
+                    vali_acc = sess.run(accuracy, feed_dict={x: x_reshaped_v, y_: mnist.validation.labels})
+                    test_acc = sess.run(accuracy, feed_dict={x: x_reshaped_t, y_: mnist.test.labels})
+                    print("After %s steps, the accuracy on validation: %g, the accuracy on test: %g." % (global_step, vali_acc, test_acc))
                 else:
                     print("checkpoint model not found!")
                     return
