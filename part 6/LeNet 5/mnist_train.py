@@ -34,7 +34,7 @@ def train(mnist):
                                                global_step, 
                                                mnist.train.num_examples/BATCH_SIZE,LEARNING_RATE_DECAY, 
                                                True)
-    train = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss, global_step)
+    train = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(loss, global_step)
     
     ema = tf.train.ExponentialMovingAverage(MOVEING_AVERAGE_DECAY, global_step)
     ema_op = ema.apply(tf.trainable_variables())
